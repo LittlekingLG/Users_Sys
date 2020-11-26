@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        table{
+            text-align: center;
+            font-size: 24px;
+            font-family: "楷体";
+            width: 700px;
+            border-collapse: collapse;
+        }
+        form,input,#btn{
+            font-size: 24px;
+            font-family: "楷体";
+
+        }
+        form{
+            margin-left: 450px;
+        }
+
+        td,th{
+            border: 1px solid;
+        }
+
+        #btn{
+            margin-left: 650px;
+        }
+    </style>
+</head>
+<script src="js/jquery-1.12.4.min.js"></script>
+<script>
+    $(function(){
+        $.ajax({
+            url:"list",
+            type:"get",
+            success:function(data){
+                $(".delete").remove();
+                $.each(data,function (index,user) {
+                    $("#tab").append(
+                        "<tr class='delete' >" +
+                        "<td>"+user.uId+"</td>" +
+                        "<td>"+user.uName+"</td>" +
+                        "<td>"+user.age+"</td>" +
+                        "<td>"+user.sex+"</td>" +
+                        "</tr>"
+                    )
+                })
+            }
+        });
+
+        $("#btn").on("click",function () {
+            var param=$("#f1").serialize();
+            $.ajax({
+                url:"add",
+                type:"get",
+                data:param,
+                success:function(data) {
+                    if (data == 200) {
+                        $.ajax({
+                            url: "list",
+                            type: "get",
+                            success: function (data) {
+                                $(".delete").remove();
+                                $.each(data, function (index, user) {
+                                    $("#tab").append(
+                                        "<tr class='delete' >" +
+                                        "<td>" + user.uId + "</td>" +
+                                        "<td>" + user.uName + "</td>" +
+                                        "<td>" + user.age + "</td>" +
+                                        "<td>" + user.sex + "</td>" +
+                                        "</tr>"
+                                    )
+                                })
+                            }
+                        });
+                    }
+                }
+            });
+        })
+    });
+</script>
+<body>
+    <table id="tab" align="center">
+        <tr>
+            <th>用户id</th>
+            <th>用户姓名</th>
+            <th>用户性别</th>
+            <th>用户年龄</th>
+        </tr>
+    </table><br/><br/>
+
+    <form id="f1">
+        用户编号：<input type="text" name="uId" placeholder="id"><br/><br/>
+        用户名字：<input type="text" name="uName" placeholder="名字"><br/><br/>
+        用户性别：<input type="text" name="sex" placeholder="性别"><br/><br/>
+        用户年龄：<input type="text" name="age" placeholder="年龄"><br/><br/>
+    </form>
+    <br/><button id="btn">添加</button>
+
+
+
+</body>
+</html>
